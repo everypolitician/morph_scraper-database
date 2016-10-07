@@ -14,7 +14,7 @@ module Minitest
     end
 
     def create_database(data)
-      Tempfile.new.tap do |tmp_file|
+      Tempfile.new('morph_scraper-database:test_helper').tap do |tmp_file|
         db = Sequel.sqlite(tmp_file.path)
         data.each do |table, rows|
           db.create_table(table) do

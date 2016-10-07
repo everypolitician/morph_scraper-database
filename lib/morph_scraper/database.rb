@@ -38,7 +38,7 @@ module MorphScraper
     attr_reader :scraper, :api_key
 
     def scraper_database
-      @scraper_database ||= Tempfile.new.tap do |tmp_file|
+      @scraper_database ||= Tempfile.new('morph_scraper-database').tap do |tmp_file|
         IO.copy_stream(open("https://morph.io/#{scraper}/data.sqlite?key=#{api_key}"), tmp_file.path)
       end
     end

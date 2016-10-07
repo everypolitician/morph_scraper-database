@@ -26,19 +26,21 @@ Or install it yourself as:
 
 **WARNING**: This will destroy any existing data in the current scraper's `data.sqlite` database, so make sure that you _actually_ want to do this!
 
-To *overwrite* the contents of the current scraper's database, run the following:
+Make sure your morph.io API key is set in the `MORPH_API_KEY` environment variable. Then you can overwrite the current `data.sqlite` by adding the following code to a scraper:
+
+```ruby
+require 'morph_scraper/database'
+MorphScraper::Database.new('tmtmtmtm/malta-parliament').write(force: true)
+```
+
+**Note**: The above code will overwrite the database of the _current_ scraper with the contents of the _named_ scraper's database **every single time** this code is run. You might want to make this code conditional on an environment variable or remove it once you've used it, otherwise it will overwrite your database on each run and you can potentially loose data.
+
+If you require more control over the API key and the path that the database is written to:
 
 ```ruby
 require 'morph_scraper/database'
 scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament', api_key: 'replace_with_your_morph_api_key')
 scraper_db.write(path: 'data.sqlite', force: true)
-```
-
-**Note**: If you put your morph.io API key in the `MORPH_API_KEY` environment variable then you don't need the `api_key` constructor argument. If you also want to write the data out to the default `data.sqlite` then you can simplify the code to this:
-
-```ruby
-require 'morph_scraper/database'
-MorphScraper::Database.new('tmtmtmtm/malta-parliament').write
 ```
 
 ## Development

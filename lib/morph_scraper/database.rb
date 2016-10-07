@@ -25,6 +25,10 @@ module MorphScraper
       sequel[:data].to_a
     end
 
+    def table(table_name)
+      sequel[table_name.to_sym].to_a
+    end
+
     private
 
     attr_reader :scraper, :api_key

@@ -24,7 +24,7 @@ Or install it yourself as:
 
 ## Usage
 
-*WARNING*: This will destroy any existing data in the current scraper's `data.sqlite` database, so make sure that you _actually_ want to do this!
+**WARNING**: This will destroy any existing data in the current scraper's `data.sqlite` database, so make sure that you _actually_ want to do this!
 
 To *overwrite* the contents of the current scraper's database, run the following:
 

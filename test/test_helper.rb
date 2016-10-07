@@ -3,6 +3,7 @@ require 'morph_scraper/database'
 
 require 'minitest/autorun'
 require 'webmock/minitest'
+require 'pry'
 
 module Minitest
   class Spec

@@ -17,7 +17,7 @@ module MorphScraper
           'Pass the `force` option to the constructor to overwrite.'
         raise Error, message
       end
-      File.write(path, scraper_database)
+      IO.copy_stream(scraper_database.path, path)
     end
 
     private
@@ -25,7 +25,9 @@ module MorphScraper
     attr_reader :scraper, :api_key
 
     def scraper_database
-      open("https://morph.io/#{scraper}/data.sqlite?key=#{api_key}").read
+      @scraper_database ||= Tempfile.new.tap do |tmp_file|
+        IO.copy_stream(open("https://morph.io/#{scraper}/data.sqlite?key=#{api_key}"), tmp_file.path)
+      end
     end
   end
 end

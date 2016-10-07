@@ -65,5 +65,10 @@ describe MorphScraper::Database do
     it 'returns other tables' do
       subject.table('names').must_equal [{ name: 'Alice' }, { name: 'Bob' }]
     end
+
+    it 'allows arbitraty SQL queries' do
+      expected = [{ name: 'ALICE', term: 5 }, { name: 'BOB', term: 5 }]
+      subject.query('select upper(name) name, 5 as term from names').must_equal expected
+    end
   end
 end

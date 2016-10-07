@@ -34,7 +34,12 @@ scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament', api_key: 'r
 scraper_db.write(path: 'data.sqlite', force: true)
 ```
 
-**Note**: If you put your morph.io API key in the `MORPH_API_KEY` environment variable then you don't need the `api_key` constructor argument.
+**Note**: If you put your morph.io API key in the `MORPH_API_KEY` environment variable then you don't need the `api_key` constructor argument. If you also want to write the data out to the default `data.sqlite` then you can simplify the code to this:
+
+```ruby
+require 'morph_scraper/database'
+MorphScraper::Database.new('tmtmtmtm/malta-parliament').write
+```
 
 ## Development
 

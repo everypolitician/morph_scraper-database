@@ -12,5 +12,17 @@ module Minitest
         Dir.chdir(tmp_dir, &block)
       end
     end
+
+    def create_database(data)
+      Tempfile.new.tap do |tmp_file|
+        db = Sequel.sqlite(tmp_file.path)
+        data.each do |table, rows|
+          db.create_table(table) do
+            rows.first.keys.each { |key| String key }
+          end
+          rows.each { |row| db[table.to_sym].insert(row) }
+        end
+      end
+    end
   end
 end

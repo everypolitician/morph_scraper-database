@@ -34,6 +34,8 @@ scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament', api_key: 'r
 scraper_db.write(path: 'data.sqlite', force: true)
 ```
 
+**Note**: If you put your morph.io API key in the `MORPH_API_KEY` environment variable then you don't need the `api_key` constructor argument.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

@@ -26,6 +26,8 @@ Or install it yourself as:
 
 **WARNING**: This will destroy any existing data in the current scraper's `data.sqlite` database, so make sure that you _actually_ want to do this!
 
+### Basic
+
 Make sure your morph.io API key is set in the `MORPH_API_KEY` environment variable. Then you can overwrite the current `data.sqlite` by adding the following code to a scraper:
 
 ```ruby
@@ -34,6 +36,8 @@ MorphScraper::Database.new('tmtmtmtm/malta-parliament').write(force: true)
 ```
 
 **Note**: The above code will overwrite the database of the _current_ scraper with the contents of the _named_ scraper's database **every single time** this code is run. You might want to make this code conditional on an environment variable or remove it once you've used it, otherwise it will overwrite your database on each run and you can potentially loose data.
+
+### Advanced
 
 If you require more control over the API key and the path that the database is written to:
 

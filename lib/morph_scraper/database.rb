@@ -6,27 +6,23 @@ module MorphScraper
   class Database
     class Error < StandardError; end
 
-    def initialize(scraper, api_key: ENV['MORPH_API_KEY'], force: false)
+    def initialize(scraper, api_key: ENV['MORPH_API_KEY'])
       @scraper = scraper
       @api_key = api_key
-      @force = force
     end
 
-    def copy
-      raise Error, existing_scraper_error if File.exist?('data.sqlite') && !force?
-      File.write('data.sqlite', scraper_database)
+    def write(path: 'data.sqlite', force: false)
+      if File.exist?(path) && !force
+        message = 'data.sqlite already exists! ' \
+          'Pass the `force` option to the constructor to overwrite.'
+        raise Error, message
+      end
+      File.write(path, scraper_database)
     end
 
     private
 
-    attr_reader :scraper, :api_key, :force
-
-    alias force? force
-
-    def existing_scraper_error
-      'data.sqlite already exists! ' \
-        'Pass the `force` option to the constructor to overwrite.'
-    end
+    attr_reader :scraper, :api_key
 
     def scraper_database
       open("https://morph.io/#{scraper}/data.sqlite?key=#{api_key}").read

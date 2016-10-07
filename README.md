@@ -31,7 +31,7 @@ To *overwrite* the contents of the current scraper's database, run the following
 ```ruby
 require_relative 'morph_scraper/database'
 scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament', api_key: 'replace_with_your_morph_api_key')
-scraper_db.overwrite('data.sqlite')
+scraper_db.write(path: 'data.sqlite', force: true)
 ```
 
 ## Development

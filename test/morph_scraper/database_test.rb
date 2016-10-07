@@ -21,7 +21,7 @@ describe MorphScraper::Database do
   it 'copies the remote database into the current directory' do
     with_tmp_dir do
       File.exist?('data.sqlite').must_equal false
-      subject.copy
+      subject.write
       File.exist?('data.sqlite').must_equal true
       File.read('data.sqlite').must_equal 'remote data'
     end
@@ -30,17 +30,17 @@ describe MorphScraper::Database do
   it "doesn't overwrite an existing database" do
     with_tmp_dir do
       FileUtils.touch('data.sqlite')
-      -> { subject.copy }.must_raise MorphScraper::Database::Error
+      -> { subject.write }.must_raise MorphScraper::Database::Error
     end
   end
 
   describe 'with force: true option' do
-    subject { MorphScraper::Database.new('chrismytton/denmark-folketing-wikidata', api_key: 'secret', force: true) }
+    subject { MorphScraper::Database.new('chrismytton/denmark-folketing-wikidata', api_key: 'secret') }
 
     it 'overwrites an existing database' do
       with_tmp_dir do
         File.write('data.sqlite', 'existing')
-        subject.copy
+        subject.write(force: true)
         File.read('data.sqlite').must_equal 'remote data'
       end
     end

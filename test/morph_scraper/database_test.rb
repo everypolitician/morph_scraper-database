@@ -39,4 +39,15 @@ describe MorphScraper::Database do
       end
     end
   end
+
+  describe 'getting data out' do
+    before do
+      stub_request(:get, 'https://morph.io/chrismytton/denmark-folketing-wikidata/data.sqlite?key=secret')
+        .to_return(body: create_database(data: [{ test: 'foo' }]).read)
+    end
+
+    it 'returns the data' do
+      subject.data.must_equal [{ test: 'foo' }]
+    end
+  end
 end

@@ -49,6 +49,26 @@ scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament', api_key: 'r
 scraper_db.write(path: 'data.sqlite', force: true)
 ```
 
+### Getting data from another scraper
+
+In some situations you might just want to get a subset of the data from a remote scraper, or you might want to get all of the data and then merge it with the existing data that you have locally, for that you can use the `#data` and `#query` methods:
+
+To get all the data from a table back as an array of hashes, use `Database#data`:
+
+```ruby
+require 'morph_scraper/database'
+scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament')
+
+# Equivalent to SELECT * FROM data;
+scraper_db.data
+
+# Equivalent to SELECT * FROM terms;
+scraper_db.data(:terms)
+
+# Or you can run a custom query
+scraper_db.query('SELECT *, 5 as term FROM data LIMIT 10')
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

@@ -21,11 +21,7 @@ module MorphScraper
       IO.copy_stream(scraper_database.path, path)
     end
 
-    def data
-      sequel[:data].to_a
-    end
-
-    def table(table_name)
+    def data(table_name = :data)
       sequel[table_name.to_sym].to_a
     end
 

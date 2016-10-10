@@ -63,7 +63,7 @@ describe MorphScraper::Database do
     end
 
     it 'returns other tables' do
-      subject.table('names').must_equal [{ name: 'Alice' }, { name: 'Bob' }]
+      subject.data('names').must_equal [{ name: 'Alice' }, { name: 'Bob' }]
     end
 
     it 'allows arbitraty SQL queries' do

@@ -77,10 +77,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/morph_scraper-database.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/everypolitician/morph_scraper-database.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-

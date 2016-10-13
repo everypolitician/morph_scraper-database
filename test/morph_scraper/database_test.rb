@@ -5,12 +5,6 @@ describe MorphScraper::Database do
     ::MorphScraper::Database::VERSION.wont_be_nil
   end
 
-  def with_tmp_dir(&block)
-    Dir.mktmpdir do |tmp_dir|
-      Dir.chdir(tmp_dir, &block)
-    end
-  end
-
   before do
     stub_request(:get, 'https://morph.io/chrismytton/denmark-folketing-wikidata/data.sqlite?key=secret')
       .to_return(body: 'remote data')

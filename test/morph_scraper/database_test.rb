@@ -72,4 +72,20 @@ describe MorphScraper::Database do
       end
     end
   end
+
+  describe '#query' do
+    let(:scraper_slug) { 'everypolitician-scrapers/test-example' }
+    subject { MorphScraper::Database.new(scraper_slug, api_key: 'secret') }
+    let(:api_response) { [{ name: 'ALICE', term: 5 }, { name: 'BOB', term: 5 }] }
+
+    before do
+      @morph_api_query = stub_morph_query(scraper_slug, 'SELECT UPPER(name) name, 5 AS term FROM names')
+                         .to_return(body: api_response.to_json)
+    end
+
+    it 'returns the data for the query' do
+      subject.query('SELECT UPPER(name) name, 5 AS term FROM names').must_equal api_response
+      assert_requested @morph_api_query
+    end
+  end
 end

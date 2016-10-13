@@ -1,5 +1,6 @@
 require 'morph_scraper/database/version'
 require 'open-uri'
+require 'json'
 
 module MorphScraper
   # Copy a sqlite database from another morph scraper into the current one.
@@ -21,10 +22,11 @@ module MorphScraper
     end
 
     def data(table = :data)
-      query = "SELECT * FROM #{table}"
-      uri = "https://api.morph.io/#{scraper}/data.json" \
-        "?#{URI.encode_www_form(key: api_key, query: query)}"
-      JSON.parse(open(uri).read, symbolize_names: true)
+      query("SELECT * FROM #{table}")
+    end
+
+    def query(sql)
+      JSON.parse(morph_api_json(sql), symbolize_names: true)
     end
 
     private
@@ -33,6 +35,11 @@ module MorphScraper
 
     def scraper_database
       open("https://morph.io/#{scraper}/data.sqlite?key=#{api_key}").read
+    end
+
+    def morph_api_json(sql)
+      open("https://api.morph.io/#{scraper}/data.json" \
+           "?#{URI.encode_www_form(key: api_key, query: sql)}").read
     end
   end
 end

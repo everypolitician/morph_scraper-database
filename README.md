@@ -37,7 +37,7 @@ require 'morph_scraper/database'
 MorphScraper::Database.new('tmtmtmtm/malta-parliament').write(force: true)
 ```
 
-**Note**: The above code will overwrite the database of the _current_ scraper with the contents of the _named_ scraper's database **every single time** this code is run. You might want to make this code conditional on an environment variable or remove it once you've used it, otherwise it will overwrite your database on each run and you can potentially loose data.
+**Note**: The above code will overwrite the database of the _current_ scraper with the contents of the _named_ scraper's database **every single time** this code is run. You might want to make this code conditional on an environment variable or remove it once you've used it, otherwise it will overwrite your database on each run and you can potentially lose data.
 
 #### Advanced
 

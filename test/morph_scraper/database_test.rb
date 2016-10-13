@@ -39,4 +39,20 @@ describe MorphScraper::Database do
       end
     end
   end
+
+  describe '#data' do
+    let(:scraper_slug) { 'everypolitician-scrapers/test-example' }
+    let(:api_response) { [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }] }
+    subject { MorphScraper::Database.new(scraper_slug, api_key: 'secret') }
+
+    before do
+      @morph_api_query = stub_morph_query(scraper_slug, 'SELECT * FROM data')
+                         .to_return(body: api_response.to_json)
+    end
+
+    it 'returns the contents of the data table with no arguments' do
+      subject.data.must_equal api_response
+      assert_requested @morph_api_query
+    end
+  end
 end

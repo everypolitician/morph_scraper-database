@@ -20,8 +20,8 @@ module MorphScraper
       File.write(path, scraper_database)
     end
 
-    def data
-      query = 'SELECT * FROM data'
+    def data(table = :data)
+      query = "SELECT * FROM #{table}"
       uri = "https://api.morph.io/#{scraper}/data.json" \
         "?#{URI.encode_www_form(key: api_key, query: query)}"
       JSON.parse(open(uri).read, symbolize_names: true)

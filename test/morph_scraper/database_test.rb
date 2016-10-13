@@ -42,17 +42,34 @@ describe MorphScraper::Database do
 
   describe '#data' do
     let(:scraper_slug) { 'everypolitician-scrapers/test-example' }
-    let(:api_response) { [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }] }
     subject { MorphScraper::Database.new(scraper_slug, api_key: 'secret') }
 
-    before do
-      @morph_api_query = stub_morph_query(scraper_slug, 'SELECT * FROM data')
-                         .to_return(body: api_response.to_json)
+    describe 'with no arguments' do
+      let(:api_response) { [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }] }
+
+      before do
+        @morph_api_query = stub_morph_query(scraper_slug, 'SELECT * FROM data')
+                           .to_return(body: api_response.to_json)
+      end
+
+      it 'returns the contents of the data table' do
+        subject.data.must_equal api_response
+        assert_requested @morph_api_query
+      end
     end
 
-    it 'returns the contents of the data table with no arguments' do
-      subject.data.must_equal api_response
-      assert_requested @morph_api_query
+    describe 'with a table argument' do
+      let(:api_response) { [{ color: 'Red' }, { color: 'Black' }] }
+
+      before do
+        @morph_api_query = stub_morph_query(scraper_slug, 'SELECT * FROM colors')
+                           .to_return(body: api_response.to_json)
+      end
+
+      it 'returns the contents of the table specified' do
+        subject.data(:colors).must_equal api_response
+        assert_requested @morph_api_query
+      end
     end
   end
 end

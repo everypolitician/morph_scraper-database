@@ -11,5 +11,9 @@ module Minitest
         Dir.chdir(tmp_dir, &block)
       end
     end
+
+    def stub_morph_query(scraper, query, key = 'secret')
+      stub_request(:get, "https://api.morph.io/#{scraper}/data.json?#{URI.encode_www_form(key: key, query: query)}")
+    end
   end
 end

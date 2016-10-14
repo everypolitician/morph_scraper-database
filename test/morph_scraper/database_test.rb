@@ -5,12 +5,6 @@ describe MorphScraper::Database do
     ::MorphScraper::Database::VERSION.wont_be_nil
   end
 
-  def with_tmp_dir(&block)
-    Dir.mktmpdir do |tmp_dir|
-      Dir.chdir(tmp_dir, &block)
-    end
-  end
-
   before do
     stub_request(:get, 'https://morph.io/chrismytton/denmark-folketing-wikidata/data.sqlite?key=secret')
       .to_return(body: 'remote data')
@@ -43,6 +37,55 @@ describe MorphScraper::Database do
         subject.write(force: true)
         File.read('data.sqlite').must_equal 'remote data'
       end
+    end
+  end
+
+  describe '#data' do
+    let(:scraper_slug) { 'everypolitician-scrapers/test-example' }
+    subject { MorphScraper::Database.new(scraper_slug, api_key: 'secret') }
+
+    describe 'with no arguments' do
+      let(:api_response) { [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }] }
+
+      before do
+        @morph_api_query = stub_morph_query(scraper_slug, 'SELECT * FROM data')
+                           .to_return(body: api_response.to_json)
+      end
+
+      it 'returns the contents of the data table' do
+        subject.data.must_equal api_response
+        assert_requested @morph_api_query
+      end
+    end
+
+    describe 'with a table argument' do
+      let(:api_response) { [{ color: 'Red' }, { color: 'Black' }] }
+
+      before do
+        @morph_api_query = stub_morph_query(scraper_slug, 'SELECT * FROM colors')
+                           .to_return(body: api_response.to_json)
+      end
+
+      it 'returns the contents of the table specified' do
+        subject.data(:colors).must_equal api_response
+        assert_requested @morph_api_query
+      end
+    end
+  end
+
+  describe '#query' do
+    let(:scraper_slug) { 'everypolitician-scrapers/test-example' }
+    subject { MorphScraper::Database.new(scraper_slug, api_key: 'secret') }
+    let(:api_response) { [{ name: 'ALICE', term: 5 }, { name: 'BOB', term: 5 }] }
+
+    before do
+      @morph_api_query = stub_morph_query(scraper_slug, 'SELECT UPPER(name) name, 5 AS term FROM names')
+                         .to_return(body: api_response.to_json)
+    end
+
+    it 'returns the data for the query' do
+      subject.query('SELECT UPPER(name) name, 5 AS term FROM names').must_equal api_response
+      assert_requested @morph_api_query
     end
   end
 end

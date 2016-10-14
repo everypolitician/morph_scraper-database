@@ -24,9 +24,11 @@ Or install it yourself as:
 
 ## Usage
 
+### Replace your local `data.sqlite` with one from another scraper
+
 **WARNING**: This will destroy any existing data in the current scraper's `data.sqlite` database, so make sure that you _actually_ want to do this!
 
-### Basic
+#### Basic
 
 Make sure your morph.io API key is set in the `MORPH_API_KEY` environment variable. Then you can overwrite the current `data.sqlite` by adding the following code to a scraper:
 
@@ -35,9 +37,9 @@ require 'morph_scraper/database'
 MorphScraper::Database.new('tmtmtmtm/malta-parliament').write(force: true)
 ```
 
-**Note**: The above code will overwrite the database of the _current_ scraper with the contents of the _named_ scraper's database **every single time** this code is run. You might want to make this code conditional on an environment variable or remove it once you've used it, otherwise it will overwrite your database on each run and you can potentially loose data.
+**Note**: The above code will overwrite the database of the _current_ scraper with the contents of the _named_ scraper's database **every single time** this code is run. You might want to make this code conditional on an environment variable or remove it once you've used it, otherwise it will overwrite your database on each run and you can potentially lose data.
 
-### Advanced
+#### Advanced
 
 If you require more control over the API key and the path that the database is written to:
 
@@ -45,6 +47,26 @@ If you require more control over the API key and the path that the database is w
 require 'morph_scraper/database'
 scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament', api_key: 'replace_with_your_morph_api_key')
 scraper_db.write(path: 'data.sqlite', force: true)
+```
+
+### Getting data from another scraper
+
+In some situations you might just want to get a subset of the data from a remote scraper, or you might want to get all of the data and then merge it with the existing data that you have locally, for that you can use the `#data` and `#query` methods:
+
+To get all the data from a table back as an array of hashes, use `Database#data`:
+
+```ruby
+require 'morph_scraper/database'
+scraper_db = MorphScraper::Database.new('tmtmtmtm/malta-parliament')
+
+# Equivalent to SELECT * FROM data;
+scraper_db.data
+
+# Equivalent to SELECT * FROM terms;
+scraper_db.data(:terms)
+
+# Or you can run a custom query
+scraper_db.query('SELECT *, 5 as term FROM data LIMIT 10')
 ```
 
 ## Development
@@ -55,10 +77,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/morph_scraper-database.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/everypolitician/morph_scraper-database.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-

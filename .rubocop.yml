@@ -1,6 +1,12 @@
 AllCops:
   TargetRubyVersion: 2.1
 
+# Minitest::Spec uses long blocks to contains the specs, so disable this check
+# for the tests.
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+
 inherit_from:
   - https://raw.githubusercontent.com/everypolitician/everypolitician-data/master/.rubocop_base.yml
   - .rubocop_todo.yml
